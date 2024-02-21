@@ -5,6 +5,8 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
+MAX_VALUE = 1000
+MIN_VALUE = -1000
 
 class AsistenLogic(BaseLogic):
     def __init__(self):
@@ -12,33 +14,75 @@ class AsistenLogic(BaseLogic):
         self.goal_position: Optional[Position] = None
         self.current_direction = 0
 
-    def next_move(self, board_bot: GameObject, board: Board):
+    def manhattan_distance(self, position1: Position, position2: Position) -> int:
+        return abs(position1.x - position2.x) + abs(position1.y - position2.y)
+    
+    def positions_value(self, board_bot: GameObject, board: Board) -> dict:
+        current_position = board_bot.position
+        base_position = board_bot.properties.base
         props = board_bot.properties
-        # Analyze new state
+        positions = {}
+        
+        # Must go to base if we have 5 diamonds
         if props.diamonds == 5:
             # Move to base
-            base = board_bot.properties.base
-            self.goal_position = base
-        else:
-            # Just roam around
-            self.goal_position = None
+            positions[(base_position.x, base_position.y)] = MAX_VALUE * 2
+            
+        # Diamonds
+        diamonds = board.diamonds
+        diamonds1 = [d.position for d in diamonds if d.properties.points == 1]
+        diamonds2 = [d.position for d in diamonds if d.properties.points == 2]
+        # calculate manhattan distance for each diamond
+        for d in diamonds1:
+            distance = self.manhattan_distance(current_position, d)
+            positions[(d.x, d.y)] = MAX_VALUE - (distance) - 2
+        for d in diamonds2:
+            distance = self.manhattan_distance(current_position, d)
+            positions[(d.x, d.y)] = MAX_VALUE - distance
+            
+        # Teleport 
+        
+        # Base
+        
+        # Red Button
+        
+        # Enemy to be tackled if can_tackle
 
+        return positions
+
+    def best_position(self, board_bot: GameObject, board: Board) -> Position:
+        positions_dict = self.positions_value(board_bot, board)
+        best_position = max(positions_dict, key=positions_dict.get)
+        return Position(best_position[0], best_position[1])
+
+    def movable_positions_value(self, board_bot: GameObject, board: Board) -> dict:
+        best_position = self.best_position(board_bot, board)
         current_position = board_bot.position
-        if self.goal_position:
-            # We are aiming for a specific position, calculate delta
-            delta_x, delta_y = get_direction(
-                current_position.x,
-                current_position.y,
-                self.goal_position.x,
-                self.goal_position.y,
+        movable_positions = {}
+        for direction in self.directions:
+            new_position = Position(
+                current_position.x + direction[0],
+                current_position.y + direction[1],
             )
-        else:
-            # Roam around
-            delta = self.directions[self.current_direction]
-            delta_x = delta[0]
-            delta_y = delta[1]
-            if random.random() > 0.6:
-                self.current_direction = (self.current_direction + 1) % len(
-                    self.directions
-                )
+            if board.is_valid_move(current_position, direction[0], direction[1]):
+                distance = self.manhattan_distance(best_position, new_position)
+                movable_positions[(new_position.x, new_position.y)] = MAX_VALUE - distance
+        return movable_positions
+
+    def goal_position(self, movable_positions: dict) -> Position:
+        p = max(movable_positions, key=movable_positions.get)
+        return Position(p[0], p[1])
+        
+    
+    def next_move(self, board_bot: GameObject, board: Board):
+        current_position = board_bot.position   
+        movable_positions = self.movable_positions_value(board_bot, board)
+        position = AsistenLogic.goal_position(self, movable_positions)
+        
+        delta_x, delta_y = get_direction(
+            current_position.x,
+            current_position.y,
+            position.x,
+            position.y,
+        )
         return delta_x, delta_y
