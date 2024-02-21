@@ -48,6 +48,12 @@ class AsistenLogic(BaseLogic):
         
         # Enemy to be tackled if can_tackle
 
+    
+        if len(positions) == 0:
+            # random move
+            random_direction = random.choice(self.directions)
+            positions[(random_direction[0], random_direction[1])] = MIN_VALUE
+            
         return positions
 
     def best_position(self, board_bot: GameObject, board: Board) -> Position:
