@@ -5,7 +5,9 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
-MAX_VALUE = 1000
+RETURN_TO_BASE_VALUE = 9999
+TACKLE_VALUE = 10000
+MAX_VALUE = 5000
 MIN_VALUE = -1000
 
 class AsistenLogic(BaseLogic):
@@ -21,12 +23,14 @@ class AsistenLogic(BaseLogic):
         current_position = board_bot.position
         base_position = board_bot.properties.base
         props = board_bot.properties
+        otherbots = board.bots
+        otherbots_position = [bots.position for bots in otherbots]
         positions = {}
         
         # Must go to base if we have 5 diamonds
         if props.diamonds == 5:
             # Move to base
-            positions[(base_position.x, base_position.y)] = MAX_VALUE * 2
+            positions[(base_position.x, base_position.y)] = RETURN_TO_BASE_VALUE
             
         # Diamonds
         diamonds = board.diamonds
@@ -35,19 +39,21 @@ class AsistenLogic(BaseLogic):
         # calculate manhattan distance for each diamond
         for d in diamonds1:
             distance = self.manhattan_distance(current_position, d)
-            positions[(d.x, d.y)] = MAX_VALUE - (distance) - 2
+            positions[(d.x, d.y)] = MAX_VALUE - (distance)**2
         for d in diamonds2:
             distance = self.manhattan_distance(current_position, d)
-            positions[(d.x, d.y)] = MAX_VALUE - distance
+            positions[(d.x, d.y)] = MAX_VALUE - (distance*0.8)**2
             
         # Teleport 
         
         # Base
         
         # Red Button
-        
         # Enemy to be tackled if can_tackle
-
+        for directions in self.directions:
+            for other in otherbots_position:
+                if other.x == current_position + directions[0] and other.y == current_position + directions[1] :
+                    positions[(other.x,other.y)] = TACKLE_VALUE
     
         if len(positions) == 0:
             # random move
