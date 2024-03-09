@@ -50,10 +50,10 @@ class AsistenLogic(BaseLogic):
         
         # Red Button
         # Enemy to be tackled if can_tackle
-        for directions in self.directions:
-            for other in otherbots_position:
-                if other.x == current_position + directions[0] and other.y == current_position + directions[1] :
-                    positions[(other.x,other.y)] = TACKLE_VALUE
+        # for directions in self.directions:
+        #     for other in otherbots_position:
+        #         if other.x == current_position + directions[0] and other.y == current_position + directions[1] :
+        #             positions[(other.x,other.y)] = TACKLE_VALUE
     
         if len(positions) == 0:
             # random move
