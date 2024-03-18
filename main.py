@@ -9,6 +9,14 @@ from game.logic.random import RandomLogic
 from game.logic.asisten import AsistenLogic
 from game.util import *
 from game.logic.base import BaseLogic
+# import from tubes mahasiswa:
+from game.logic.ArticaKenapaBatal import MeowNearestDiamond
+from game.logic.Cijawjaw import CijawjawLogic
+from game.logic.DNA import DNALogic
+from game.logic.Dujari import DujariLogic
+from game.logic.QUEEN import QUEENLogic
+from game.logic.terkesTima import TerkesTimaLogic
+from game.logic.TheYuds import TheYudsLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
@@ -16,6 +24,18 @@ DEFAULT_BOARD_ID = 4
 CONTROLLERS = {
     "Random": RandomLogic,
     "Asisten": AsistenLogic,
+    # Controllers from tubes mahasiswa:
+    "ArticaKenapaBatal": MeowNearestDiamond,
+    "Cijawjaw": CijawjawLogic,
+    "DNA": DNALogic,
+    "Dujari": DujariLogic,
+    "QUEEN": QUEENLogic,
+    "terkesTima": TerkesTimaLogic,
+    "TheYuds": TheYudsLogic,
+    
+    
+    
+    
 }
 
 ###############################################################################
