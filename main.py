@@ -32,6 +32,13 @@ from game.logic.TuanKrabs import GradientLogic as TuanKrabsLogic
 from game.logic.metiuganteng import botLogic as MetiuLogic
 from game.logic.Robotnik import Robotnik as RobotnikLogic
 from game.logic.Kelompok56 import Kelompok56 as Kel56Logic
+from game.logic.tbfoReborn import MyBot as tbfoRebornLogic
+from game.logic.susugratis import Logic as susugratisLogic
+from game.logic.gatauHehe import LTD as gatauHeheLogic
+from game.logic.SiniMainSamaOm import OptBot as SiniMainSamaOmLogic
+from game.logic.ilmuPadi import Padibot as ilmuPadiLogic
+from game.logic.MVP import GreedyDiamondLogic as MVPLogic
+from game.logic.SulfatGemoy import SulfatGemoy as SulfatGemoyLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
