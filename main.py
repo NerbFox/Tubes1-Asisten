@@ -24,6 +24,14 @@ from game.logic.TipisTipis import TipisTipisLogic
 from game.logic.Tulas import TulasLogic
 from game.logic.TonggokuNyalegNdes import TonggokuNyalegNdesLogic
 from game.logic.Janggar import JanggarLogic
+from game.logic.urbanGym import BotsMove as UrbanGymLogic
+from game.logic.bingung import Pulang as BingungLogic
+from game.logic.silverqueen import SuperSilverqueen as SilverqueenLogic
+from game.logic.HolderRNDR import NearestBase as HolderLogic
+from game.logic.TuanKrabs import GradientLogic as TuanKrabsLogic
+from game.logic.metiuganteng import botLogic as MetiuLogic
+from game.logic.Robotnik import Robotnik as RobotnikLogic
+from game.logic.Kelompok56 import Kelompok56 as Kel56Logic
 
 init()
 BASE_URL = "http://localhost:3000/api"
@@ -45,7 +53,15 @@ CONTROLLERS = {
     "TipisTipis": TipisTipisLogic,
     "Tulas": TulasLogic,
     "TonggokuNyalegNdes": TonggokuNyalegNdesLogic,
-    "Janggar": JanggarLogic
+    "Janggar": JanggarLogic,
+    "UrbanGym" : UrbanGymLogic,
+    "Bingung" : BingungLogic,
+    "Silverqueen" : SilverqueenLogic,
+    "HolderRNDR" : HolderLogic,
+    "TuanKrabs": TuanKrabsLogic,
+    "Metiuganteng" : MetiuLogic,
+    "Robotnik" : RobotnikLogic,
+    "Kelompok56" : Kel56Logic
 }
 
 ###############################################################################

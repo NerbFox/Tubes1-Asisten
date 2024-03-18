@@ -20,3 +20,12 @@ start cmd /c "python main.py --logic TipisTipis --email=TipisTipis@email.com --n
 start cmd /c "python main.py --logic Tulas --email=Tulas@email.com --name=Tulas --password=123456 --team etimo"
 start cmd /c "python main.py --logic TonggokuNyalegNdes --email=TonggokuNyalegNdes@email.com --name=TonggokuNyalegNdes --password=123456 --team etimo"
 start cmd /c "python main.py --logic Janggar --email=Janggar@email.com --name=Janggar --password=123456 --team etimo"
+
+start cmd /c "python main.py --logic UrbanGym--email=UrbanGym@email.com --name=UrbanGym --password=123456 --team etimo"
+start cmd /c "python main.py --logic Bingung --email=Bingung@email.com --name=Bingung --password=123456 --team etimo"
+start cmd /c "python main.py --logic Silverqueen --email=Silverqueen@email.com --name=Silverqueen --password=123456 --team etimo"
+start cmd /c "python main.py --logic HolderRNDR --email=HolderRNDR@email.com --name=HolderRNDR --password=123456 --team etimo"
+start cmd /c "python main.py --logic TuanKrabs --email=TuanKrabs@email.com --name=TuanKrabs --password=123456 --team etimo"
+start cmd /c "python main.py --logic Metiuganteng --email=Metiuganteng@email.com --name=Metiuganteng --password=123456 --team etimo"
+start cmd /c "python main.py --logic Robotnik --email=Robotnik@email.com --name=Robotnik --password=123456 --team etimo"
+start cmd /c "python main.py --logic Kelompok56 --email=Kelompok56@email.com --name=Kelompok56 --password=123456 --team etimo"
