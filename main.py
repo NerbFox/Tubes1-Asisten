@@ -17,6 +17,13 @@ from game.logic.Dujari import DujariLogic
 from game.logic.QUEEN import QUEENLogic
 from game.logic.terkesTima import TerkesTimaLogic
 from game.logic.TheYuds import TheYudsLogic
+from game.logic.OlahragaGuntur import OlahragaGunturLogic
+from game.logic.SambutRamadhan import SambutRamadhanLogic
+from game.logic.MrNaginski import MrNaginskiLogic
+from game.logic.TipisTipis import TipisTipisLogic
+from game.logic.Tulas import TulasLogic
+from game.logic.TonggokuNyalegNdes import TonggokuNyalegNdesLogic
+from game.logic.Janggar import JanggarLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
@@ -32,10 +39,13 @@ CONTROLLERS = {
     "QUEEN": QUEENLogic,
     "terkesTima": TerkesTimaLogic,
     "TheYuds": TheYudsLogic,
-    
-    
-    
-    
+    "OlahragaGuntur": OlahragaGunturLogic,
+    "SambutRamadhan": SambutRamadhanLogic,
+    "MrNaginski": MrNaginskiLogic,
+    "TipisTipis": TipisTipisLogic,
+    "Tulas": TulasLogic,
+    "TonggokuNyalegNdes": TonggokuNyalegNdesLogic,
+    "Janggar": JanggarLogic
 }
 
 ###############################################################################
