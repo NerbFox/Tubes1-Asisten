@@ -46,6 +46,14 @@ from game.logic.omega import omega as omegaLogic
 from game.logic.savage import savage as savageLogic
 from game.logic.SutaLovesEmyu import SutaLovesEmyu as SutaLovesEmyuLogic
 from game.logic.TBD import TBD as TBDLogic
+from game.logic.ALLINRM import ALLINRM as ALLINRMLogic
+from game.logic.Alucard import Alucard as AlucardLogic
+from game.logic.JadiMesin import JadiMesin as JadiMesinLogic
+from game.logic.PCS import PCS as PCSLogic
+from game.logic.ReelaIndo import ReelaIndo as ReelaIndoLogic
+from game.logic.SanssKuy import SanssKuy as SanssKuyLogic
+from game.logic.SurtiTejo import SurtiTejo as SurtiTejoLogic
+from game.logic.WLM import WLM as WLMLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
@@ -83,6 +91,14 @@ CONTROLLERS = {
     "savage" : savageLogic,
     "SutaLovesEmyu" : SutaLovesEmyuLogic,
     "TBD" : TBDLogic,
+    "ALLINRM" : ALLINRMLogic,
+    "Alucard" : AlucardLogic,
+    "JadiMesin" : JadiMesinLogic,
+    "PCS" : PCSLogic,
+    "ReelaIndo" : ReelaIndoLogic,
+    "SanssKuy" : SanssKuyLogic,
+    "SurtiTejo" : SurtiTejoLogic,
+    "WLM" : WLMLogic,
 }
 
 ###############################################################################

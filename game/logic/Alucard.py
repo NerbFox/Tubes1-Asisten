@@ -6,7 +6,7 @@ from game.models import GameObject, Board, Position
 from game.util import clamp
 from typing import List
 
-class AlucardGreedy(BaseLogic):
+class Alucard(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         self.goal_position: Optional[Position] = None

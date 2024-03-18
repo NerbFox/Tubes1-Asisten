@@ -1,7 +1,7 @@
 from ..util import get_direction
 from game.models import Board, GameObject, Properties
 
-class Manhattan(object):
+class ALLINRM(object):
     def __init__(self):
         self.goal_position = None
         self.previous_position = (None, None)

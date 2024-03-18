@@ -4,7 +4,7 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
-class MinerLovers(BaseLogic):
+class WLM(BaseLogic):
     def __init__(self):
         # Position attributes
         self.goal_position: Optional[Position] = None   # Current goal position

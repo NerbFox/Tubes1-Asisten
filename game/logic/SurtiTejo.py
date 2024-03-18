@@ -18,7 +18,7 @@ def get_direction(current_x, current_y, dest_x, dest_y):
             delta_x = 0
     return (delta_x, delta_y)
 
-class SurtiTejoBot(BaseLogic):
+class SurtiTejo(BaseLogic):
     def __init__(self):
         pass
 

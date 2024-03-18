@@ -9,7 +9,7 @@ from random import randint
 # - Portal : TeleportGameObject
 # - Diamond Button : DiamondButtonGameObject 
 
-class MyBot(BaseLogic):
+class SanssKuy(BaseLogic):
     def __init__(self):
         self.step_variation : bool = False
         self.step_ignore_portal : int = 0

@@ -45,3 +45,12 @@ start cmd /c "python main.py --logic omega --email=omega@email.com --name=omega 
 start cmd /c "python main.py --logic savage --email=savage@email.com --name=savage --password=123456 --team etimo"
 start cmd /c "python main.py --logic SutaLovesEmyu --email=SutaLovesEmyu@email.com --name=SutaLovesEmyu --password=123456 --team etimo"
 start cmd /c "python main.py --logic TBD --email=TBD@email.com --name=TBD --password=123456 --team etimo"
+
+start cmd /c "python main.py --logic ALLINRM --email=ALLINRM@email.com --name=ALLINRM --password=123456 --team etimo"
+start cmd /c "python main.py --logic Alucard --email=Alucard@email.com --name=Alucard --password=123456 --team etimo"
+start cmd /c "python main.py --logic JadiMesin --email=JadiMesin@email.com --name=JadiMesin --password=123456 --team etimo"
+start cmd /c "python main.py --logic PCS --email=PCS@email.com --name=PCS --password=123456 --team etimo"
+start cmd /c "python main.py --logic ReelaIndo --email=ReelaIndo@email.com --name=ReelaIndo --password=123456 --team etimo"
+start cmd /c "python main.py --logic SanssKuy --email=SanssKuy@email.com --name=SanssKuy --password=123456 --team etimo"
+start cmd /c "python main.py --logic SurtiTejo --email=SurtiTejo@email.com --name=SurtiTejo --password=123456 --team etimo"
+start cmd /c "python main.py --logic WLM --email=WLM@email.com --name=WLM --password=123456 --team etimo"

@@ -7,7 +7,7 @@ from game.models import GameObject, Board, Position, List
 from ..util import get_direction
 
 # yes I have been so afraid
-class TomerryLogic(BaseLogic):
+class ReelaIndo(BaseLogic):
     def __init__(self):
         self.goal_position: Optional[Position] = None
         self.goal: Optional[GameObject] = None

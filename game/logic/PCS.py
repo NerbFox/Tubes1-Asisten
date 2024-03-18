@@ -3,7 +3,7 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
-class NotrandomLogic(BaseLogic):
+class PCS(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         self.goal_position: Optional[Position] = None
