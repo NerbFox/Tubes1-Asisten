@@ -39,6 +39,13 @@ from game.logic.SiniMainSamaOm import OptBot as SiniMainSamaOmLogic
 from game.logic.ilmuPadi import Padibot as ilmuPadiLogic
 from game.logic.MVP import GreedyDiamondLogic as MVPLogic
 from game.logic.SulfatGemoy import SulfatGemoy as SulfatGemoyLogic
+from game.logic.FreeDiamonds import FreeDiamondsas as FreeDiamondsLogic
+from game.logic.NamaKelompoknyaNanti import NamaKelompoknyaNanti as NamaKelompoknyaNantiLogic
+from game.logic.NanangBoneng import NanangBoneng as NanangBonengLogic
+from game.logic.omega import omega as omegaLogic
+from game.logic.savage import savage as savageLogic
+from game.logic.SutaLovesEmyu import SutaLovesEmyu as SutaLovesEmyuLogic
+from game.logic.TBD import TBD as TBDLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
@@ -68,7 +75,14 @@ CONTROLLERS = {
     "TuanKrabs": TuanKrabsLogic,
     "Metiuganteng" : MetiuLogic,
     "Robotnik" : RobotnikLogic,
-    "Kelompok56" : Kel56Logic
+    "Kelompok56" : Kel56Logic,
+    "FreeDiamonds" : FreeDiamondsLogic,
+    "NamaKelompoknyaNanti" : NamaKelompoknyaNantiLogic,
+    "NanangBoneng" : NanangBonengLogic,
+    "omega" : omegaLogic,
+    "savage" : savageLogic,
+    "SutaLovesEmyu" : SutaLovesEmyuLogic,
+    "TBD" : TBDLogic,
 }
 
 ###############################################################################

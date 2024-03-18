@@ -37,3 +37,11 @@ start cmd /c "python main.py --logic SiniMainSamaOm --email=SiniMainSamaOm@email
 start cmd /c "python main.py --logic ilmuPadi --email=ilmuPadi@email.com --name=ilmuPadi --password=123456 --team etimo"
 start cmd /c "python main.py --logic MVP --email=MVP@email.com --name=MVP --password=123456 --team etimo"
 start cmd /c "python main.py --logic SulfatGemoy --email=SulfatGemoy@email.com --name=SulfatGemoy --password=123456 --team etimo"
+
+start cmd /c "python main.py --logic FreeDiamonds --email=FreeDiamonds@email.com --name=FreeDiamonds --password=123456 --team etimo"
+start cmd /c "python main.py --logic NamaKelompoknyaNanti --email=NamaKelompoknyaNanti@email.com --name=NamaKelompoknyaNanti --password=123456 --team etimo"
+start cmd /c "python main.py --logic NanangBoneng --email=NanangBoneng@email.com --name=NanangBoneng --password=123456 --team etimo"
+start cmd /c "python main.py --logic omega --email=omega@email.com --name=omega --password=123456 --team etimo"
+start cmd /c "python main.py --logic savage --email=savage@email.com --name=savage --password=123456 --team etimo"
+start cmd /c "python main.py --logic SutaLovesEmyu --email=SutaLovesEmyu@email.com --name=SutaLovesEmyu --password=123456 --team etimo"
+start cmd /c "python main.py --logic TBD --email=TBD@email.com --name=TBD --password=123456 --team etimo"
