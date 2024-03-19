@@ -1,8 +1,11 @@
 from typing import Tuple
 from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
-from ..util import distance
 from queue import Queue
+
+
+def distance(a: Position, b: Position):
+    return abs(a.x - b.x) + abs(a.y - b.y)
 
 
 RETREAT_DELAY: int = 3

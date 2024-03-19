@@ -9,6 +9,7 @@ from game.logic.random import RandomLogic
 from game.logic.asisten import AsistenLogic
 from game.util import *
 from game.logic.base import BaseLogic
+
 # import from tubes mahasiswa:
 from game.logic.ArticaKenapaBatal import MeowNearestDiamond
 from game.logic.Cijawjaw import CijawjawLogic
@@ -39,12 +40,15 @@ from game.logic.SiniMainSamaOm import OptBot as SiniMainSamaOmLogic
 from game.logic.ilmuPadi import Padibot as ilmuPadiLogic
 from game.logic.MVP import GreedyDiamondLogic as MVPLogic
 from game.logic.SulfatGemoy import SulfatGemoy as SulfatGemoyLogic
-from game.logic.FreeDiamonds import FreeDiamondsas as FreeDiamondsLogic
-from game.logic.NamaKelompoknyaNanti import NamaKelompoknyaNanti as NamaKelompoknyaNantiLogic
+from game.logic.FreeDiamonds import FreeDiamonds as FreeDiamondsLogic
+from game.logic.NamaKelompoknyaNanti import (
+    NamaKelompoknyaNanti as NamaKelompoknyaNantiLogic,
+)
 from game.logic.NanangBoneng import NanangBoneng as NanangBonengLogic
 from game.logic.omega import omega as omegaLogic
 from game.logic.savage import savage as savageLogic
 from game.logic.SutaLovesEmyu import SutaLovesEmyu as SutaLovesEmyuLogic
+
 from game.logic.TBD import TBD as TBDLogic
 from game.logic.ALLINRM import ALLINRM as ALLINRMLogic
 from game.logic.Alucard import Alucard as AlucardLogic
@@ -54,10 +58,25 @@ from game.logic.ReelaIndo import ReelaIndo as ReelaIndoLogic
 from game.logic.SanssKuy import SanssKuy as SanssKuyLogic
 from game.logic.SurtiTejo import SurtiTejo as SurtiTejoLogic
 from game.logic.WLM import WLM as WLMLogic
+from game.logic.DevilTears import DevilTears
+from game.logic.BawastubBot import BawastubBot
+from game.logic.akiongbot import AkiongLogic
+from game.logic.Drive2011 import Drive2011
+from game.logic.Istiqamah import Istiqamah
+from game.logic.PinjamDulu100v2 import PinjamDulu100v2
+from game.logic.Snoopy import Snoopy
+from game.logic.FirstToTheKeyFirstToTheEggBot import FirstToTheKeyFirstToTheEggBot
+from game.logic.WadasJanggar import WadasLogic
+from game.logic.blinkBlink import BestClusterLogic
+from game.logic.SarikatJava import SarikatJava
+from game.logic.Oogoe_Diamonds import Greedy_by_Ratio
+from game.logic.KoinOndo import HighestBlockPerDistanceBotLogic
+from game.logic.OkeGas import Greedy2Logic
+
 
 init()
 BASE_URL = "http://localhost:3000/api"
-DEFAULT_BOARD_ID = 4
+DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
     "Asisten": AsistenLogic,
@@ -76,29 +95,50 @@ CONTROLLERS = {
     "Tulas": TulasLogic,
     "TonggokuNyalegNdes": TonggokuNyalegNdesLogic,
     "Janggar": JanggarLogic,
-    "UrbanGym" : UrbanGymLogic,
-    "Bingung" : BingungLogic,
-    "Silverqueen" : SilverqueenLogic,
-    "HolderRNDR" : HolderLogic,
+    "UrbanGym": UrbanGymLogic,
+    "Bingung": BingungLogic,
+    "Silverqueen": SilverqueenLogic,
+    "HolderRNDR": HolderLogic,
     "TuanKrabs": TuanKrabsLogic,
-    "Metiuganteng" : MetiuLogic,
-    "Robotnik" : RobotnikLogic,
-    "Kelompok56" : Kel56Logic,
-    "FreeDiamonds" : FreeDiamondsLogic,
-    "NamaKelompoknyaNanti" : NamaKelompoknyaNantiLogic,
-    "NanangBoneng" : NanangBonengLogic,
-    "omega" : omegaLogic,
-    "savage" : savageLogic,
-    "SutaLovesEmyu" : SutaLovesEmyuLogic,
-    "TBD" : TBDLogic,
-    "ALLINRM" : ALLINRMLogic,
-    "Alucard" : AlucardLogic,
-    "JadiMesin" : JadiMesinLogic,
-    "PCS" : PCSLogic,
-    "ReelaIndo" : ReelaIndoLogic,
-    "SanssKuy" : SanssKuyLogic,
-    "SurtiTejo" : SurtiTejoLogic,
-    "WLM" : WLMLogic,
+    "Metiuganteng": MetiuLogic,
+    "Robotnik": RobotnikLogic,
+    "Kelompok56": Kel56Logic,
+    "FreeDiamonds": FreeDiamondsLogic,
+    "NamaKelompoknyaNanti": NamaKelompoknyaNantiLogic,
+    "NanangBoneng": NanangBonengLogic,
+    "omega": omegaLogic,
+    "savage": savageLogic,
+    "SutaLovesEmyu": SutaLovesEmyuLogic,
+    "TBD": TBDLogic,
+    "ALLINRM": ALLINRMLogic,
+    "Alucard": AlucardLogic,
+    "JadiMesin": JadiMesinLogic,
+    "PCS": PCSLogic,
+    "ReelaIndo": ReelaIndoLogic,
+    "SanssKuy": SanssKuyLogic,
+    "SurtiTejo": SurtiTejoLogic,
+    "WLM": WLMLogic,
+    "DevilTears": DevilTears,
+    "Drive2011": Drive2011,
+    "Istiqamah": Istiqamah,
+    "PinjamDulu100v2": PinjamDulu100v2,
+    "Snoopy": Snoopy,
+    "Bawastub": BawastubBot,
+    "Akiong": AkiongLogic,
+    "tbfoReborn": tbfoRebornLogic,
+    "susugratis": susugratisLogic,
+    "gatauHehe": gatauHeheLogic,
+    "SiniMainSamaOm": SiniMainSamaOmLogic,
+    "ilmuPadi": ilmuPadiLogic,
+    "MVP": MVPLogic,
+    "SulfatGemoy": SulfatGemoyLogic,
+    "FirstToTheKeyFirstToTheEggBot": FirstToTheKeyFirstToTheEggBot,
+    "WadasJanggar": WadasLogic,
+    "blinkBlink": BestClusterLogic,
+    "SarikatJava": SarikatJava,
+    "Oogoe_Diamonds": Greedy_by_Ratio,
+    "KoinOndo": HighestBlockPerDistanceBotLogic,
+    "OkeGas": Greedy2Logic,
 }
 
 ###############################################################################

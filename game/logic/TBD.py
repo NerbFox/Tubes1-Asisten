@@ -2,14 +2,20 @@ import random
 from typing import Optional
 
 from ..logic.base import BaseLogic
-from ..models import GameObject, Board, Position
-#from ..util import get_direction
-from ..logic.Processors.selfdefenseprocess import SelfDefense
-from ..logic.Processors.DiamondProcessor import DiamondProcessor
-from ..logic.Processors.GoHomeProcessor import GoHomeProcessor
-from ..logic.Processors.TeleporterProcessor import Teleporter
-from ..logic.Processors.ButtonProcessor import ButtonProcessor
+from ..models import Bot, GameObject, Board, Position
+
+# from ..util import get_direction
 import threading
+
+
+def get_dist(pa: Position, pb: Position) -> int:
+    return abs(pa.x - pb.x) + abs(pa.y - pb.y)
+
+
+class Processor:
+    def __init__(self):
+        pass
+
 
 class ButtonProcessor:
     bot: Bot
@@ -26,14 +32,30 @@ class ButtonProcessor:
     def __init__(self):
         pass
 
-    def eval_button(self, dist_but: int, dist_dia: int, likelihood: int, multiplier: int) -> int:
+    def eval_button(
+        self, dist_but: int, dist_dia: int, likelihood: int, multiplier: int
+    ) -> int:
         return likelihood + multiplier * (dist_dia - dist_but)
 
-    def process(self, board_bot: GameObject, board: Board) -> list[tuple[int, Position]]:
+    def process(
+        self, board_bot: GameObject, board: Board
+    ) -> list[tuple[int, Position]]:
         funcGO = lambda x, y: abs(x.x - y.x) + abs(x.y - y.y)
-        closestDiamonds = list(filter(lambda g: g.type == "DiamondGameObject" and funcGO(g.position, board_bot.position) <= self.find_rad, board.game_objects))
+        closestDiamonds = list(
+            filter(
+                lambda g: g.type == "DiamondGameObject"
+                and funcGO(g.position, board_bot.position) <= self.find_rad,
+                board.game_objects,
+            )
+        )
         num_of_dia = len(closestDiamonds)
-        buttonNow: list[GameObject] = list(filter(lambda g: g.type == "DiamondButtonGameObject" and funcGO(g.position, board_bot.position) <= self.find_rad, board.game_objects))
+        buttonNow: list[GameObject] = list(
+            filter(
+                lambda g: g.type == "DiamondButtonGameObject"
+                and funcGO(g.position, board_bot.position) <= self.find_rad,
+                board.game_objects,
+            )
+        )
         num_button: int = len(buttonNow)
         if num_button == 0:
             return []
@@ -53,17 +75,46 @@ class ButtonProcessor:
         dist_dia = 5
         dist_but = funcGO(buttonNow[0].position, board_bot.position)
         if num_of_dia != 0:
-            nearest_dia = min(closestDiamonds, key=lambda g: funcGO(g.position, board_bot.position))
+            nearest_dia = min(
+                closestDiamonds, key=lambda g: funcGO(g.position, board_bot.position)
+            )
             dist_dia = funcGO(nearest_dia.position, board_bot.position)
-        return [(self.eval_button(dist_but, dist_dia, likelihood, multiplier), buttonNow[0].position)]
-    
-class DiamondProcessor(Processor): 
+        return [
+            (
+                self.eval_button(dist_but, dist_dia, likelihood, multiplier),
+                buttonNow[0].position,
+            )
+        ]
+
+
+class DiamondProcessor(Processor):
     def __init__(self):
         self.take_n = 4
         self.rad_consider = 3
         self.return_diamond = 2
-        self.prio_dia = [0, 100, 90, 85, 80, 75, 51, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        self.prio_dia = [
+            0,
+            100,
+            90,
+            85,
+            80,
+            75,
+            51,
+            30,
+            20,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+        ]
         super().__init__()
+
     """
     def isInventoryRed(self, board_bot: GameObject) -> bool:
         if(board_bot.properties.diamonds == 4):
@@ -92,30 +143,53 @@ class DiamondProcessor(Processor):
                 cnt += 1
         return cnt
     """
-    def nearestDiamond(self, diamonds: list[GameObject], board_bot: GameObject) -> list[GameObject]:
-        diamonds.sort(key=lambda g: abs(g.position.x - board_bot.position.x) + abs(g.position.y - board_bot.position.y))
-        first_n_elem = diamonds[:self.take_n]
-        #first_n_elem.sort(key=lambda g: self.eval_elem(g, diamonds), reverse=True)
-        return first_n_elem[:self.return_diamond]
 
-    def process(self, board_bot: GameObject, board: Board) -> Optional[list[tuple[int, Position]]]:
-        #diamonds = [game_object for game_object in board.game_objects if game_object.type == "DiamondGameObject"]
-        diamonds = list(filter(lambda x: x.type == "DiamondGameObject", board.game_objects))
+    def nearestDiamond(
+        self, diamonds: list[GameObject], board_bot: GameObject
+    ) -> list[GameObject]:
+        diamonds.sort(
+            key=lambda g: abs(g.position.x - board_bot.position.x)
+            + abs(g.position.y - board_bot.position.y)
+        )
+        first_n_elem = diamonds[: self.take_n]
+        # first_n_elem.sort(key=lambda g: self.eval_elem(g, diamonds), reverse=True)
+        return first_n_elem[: self.return_diamond]
+
+    def process(
+        self, board_bot: GameObject, board: Board
+    ) -> Optional[list[tuple[int, Position]]]:
+        # diamonds = [game_object for game_object in board.game_objects if game_object.type == "DiamondGameObject"]
+        diamonds = list(
+            filter(lambda x: x.type == "DiamondGameObject", board.game_objects)
+        )
         if not diamonds:
             return []
         if board_bot.properties is not None:
             if board_bot.properties.diamonds == 4:
                 diamonds = list(filter(lambda x: x.properties.points == 1, diamonds))
         processed: list[GameObject] = self.nearestDiamond(diamonds, board_bot)
-        return [(self.prio_dia[abs(game_object.position.x - board_bot.position.x) + abs(game_object.position.y - board_bot.position.y)],
-                 game_object.position) for game_object in processed
-                if abs(game_object.position.x - board_bot.position.x) + abs(game_object.position.y - board_bot.position.y) < len(self.prio_dia)]
+        return [
+            (
+                self.prio_dia[
+                    abs(game_object.position.x - board_bot.position.x)
+                    + abs(game_object.position.y - board_bot.position.y)
+                ],
+                game_object.position,
+            )
+            for game_object in processed
+            if abs(game_object.position.x - board_bot.position.x)
+            + abs(game_object.position.y - board_bot.position.y)
+            < len(self.prio_dia)
+        ]
 
-class GoHomeProcessor(Processor): 
-    def __init__(self): 
+
+class GoHomeProcessor(Processor):
+    def __init__(self):
         super().__init__()
 
-    def calc_prio(self, dist_home, dist_dia, multiplier, likelihood, notCalled=False) -> int:
+    def calc_prio(
+        self, dist_home, dist_dia, multiplier, likelihood, notCalled=False
+    ) -> int:
         constant = 20
         if likelihood == 100 and not notCalled:
             return 500
@@ -124,9 +198,13 @@ class GoHomeProcessor(Processor):
         else:
             return likelihood + multiplier * (dist_dia - dist_home - constant)
 
-    def process(self, board_bot: GameObject, board: Board, dtl: int = 0, calledfromtele=False) -> list[tuple[int, Position]]:
+    def process(
+        self, board_bot: GameObject, board: Board, dtl: int = 0, calledfromtele=False
+    ) -> list[tuple[int, Position]]:
         home_pos: Position = board_bot.properties.base
-        diamonds = list(filter(lambda x: x.type == "DiamondGameObject", board.game_objects))
+        diamonds = list(
+            filter(lambda x: x.type == "DiamondGameObject", board.game_objects)
+        )
         inv_now: int = board_bot.properties.diamonds
         # no diamond, store ke base aja
         if not diamonds:
@@ -137,7 +215,7 @@ class GoHomeProcessor(Processor):
             return [(501, home_pos)]
         likelihood: int = 0
         multiplier: int = 0
-        #print("INV_NOW", inv_now)
+        # print("INV_NOW", inv_now)
         if inv_now == 1:
             likelihood = 10
             multiplier = 18
@@ -150,16 +228,21 @@ class GoHomeProcessor(Processor):
             likelihood = 90
         elif inv_now == 5:
             likelihood = 100
-        nearest_diamond: GameObject = min(diamonds, key=lambda y: get_dist(y.position, board_bot.position))
+        nearest_diamond: GameObject = min(
+            diamonds, key=lambda y: get_dist(y.position, board_bot.position)
+        )
         dist_dia: int = get_dist(nearest_diamond.position, board_bot.position)
         dist_home: int = get_dist(home_pos, board_bot.position)
-        priority_home = self.calc_prio(dist_home + dtl, dist_dia + dtl, multiplier, likelihood, calledfromtele)
+        priority_home = self.calc_prio(
+            dist_home + dtl, dist_dia + dtl, multiplier, likelihood, calledfromtele
+        )
         if priority_home <= 0:
             return []
         return [(priority_home, home_pos)]
 
+
 class Processor:
-    
+
     def __init__(self):
         pass
 
@@ -218,14 +301,22 @@ class Teleporter(Processor):
             return 1000, botTele[1]
     """
 
-    def process(self, board_bot: GameObject, board: Board, maxi_val: int, dist_to_home: int) -> list[tuple[int, Position]]:
-        teleporter = list(filter(lambda x: x.type == "TeleportGameObject", board.game_objects))
-        diamonds = list(filter(lambda x: x.type == "DiamondGameObject", board.game_objects))
+    def process(
+        self, board_bot: GameObject, board: Board, maxi_val: int, dist_to_home: int
+    ) -> list[tuple[int, Position]]:
+        teleporter = list(
+            filter(lambda x: x.type == "TeleportGameObject", board.game_objects)
+        )
+        diamonds = list(
+            filter(lambda x: x.type == "DiamondGameObject", board.game_objects)
+        )
         if not teleporter:
             return []
         tele1, tele2 = teleporter
         # tele_obj1, tele_obj2 = GameObject(0, tele1.position, ""), GameObject(0, tele2.position, "")
-        funcGO = lambda x, y: abs(x.position.x - y.position.x) + abs(x.position.y - y.position.y)
+        funcGO = lambda x, y: abs(x.position.x - y.position.x) + abs(
+            x.position.y - y.position.y
+        )
         minDia1 = min(diamonds, key=lambda x: funcGO(x, tele1))
         minDia2 = min(diamonds, key=lambda x: funcGO(x, tele2))
         dtl1 = funcGO(tele1, board_bot)
@@ -243,8 +334,12 @@ class Teleporter(Processor):
             ans.append((max1, tele2.position))
         if max2 > 0 and max2 > maxi_val and max2 > max1:
             ans.append((max2, tele1.position))
-        tele1GO = GameObject(board_bot.id, tele1.position, board_bot.type, board_bot.properties)
-        tele2GO = GameObject(board_bot.id, tele2.position, board_bot.type, board_bot.properties)
+        tele1GO = GameObject(
+            board_bot.id, tele1.position, board_bot.type, board_bot.properties
+        )
+        tele2GO = GameObject(
+            board_bot.id, tele2.position, board_bot.type, board_bot.properties
+        )
         prio_h_through_tele1 = self.GoHomeProcessor.process(tele1GO, board, dtl1, True)
         prio_h_through_tele2 = self.GoHomeProcessor.process(tele2GO, board, dtl2, True)
         if prio_h_through_tele1:
@@ -253,12 +348,14 @@ class Teleporter(Processor):
             ans.append((prio_h_through_tele2[0][0], tele2.position))
         return ans
 
+
 class SelfDefense(Processor):
     def __init__(self):
         super().__init__()
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         self.goal_position: Optional[Position] = None
         self.current_direction = 0
+
     """
     def run(self, board_bot: GameObject, board: Board, nearest: int) -> list[tuple[int, Position]]:
         wrong_move: list[tuple[int, Position]] = []
@@ -292,11 +389,22 @@ class SelfDefense(Processor):
         # Check safety
         if len(board.bots) == 1:
             return []
-        func_dist = lambda x, y: abs(x.position.x - y.position.x) + abs(x.position.y - y.position.y)
-        dist_one = list(filter(lambda x: func_dist(x, board_bot) == 1 and (x.position.x != x.properties.base.x or x.position.y != x.properties.base.y), board.bots))
+        func_dist = lambda x, y: abs(x.position.x - y.position.x) + abs(
+            x.position.y - y.position.y
+        )
+        dist_one = list(
+            filter(
+                lambda x: func_dist(x, board_bot) == 1
+                and (
+                    x.position.x != x.properties.base.x
+                    or x.position.y != x.properties.base.y
+                ),
+                board.bots,
+            )
+        )
         if dist_one:
             maxWithDia = max(dist_one, key=lambda x: x.properties.diamonds)
-            #move_at = Position(maxWithDia.position.y - board_bot.position.y, maxWithDia.position.x - board_bot.position.x, )
+            # move_at = Position(maxWithDia.position.y - board_bot.position.y, maxWithDia.position.x - board_bot.position.x, )
             return [(-2, maxWithDia)]
         return []
         """
@@ -317,6 +425,7 @@ class SelfDefense(Processor):
         return restricted_move
         """
 
+
 class TBD(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
@@ -334,9 +443,23 @@ class TBD(BaseLogic):
         self.Turned = False
         self.pos_turned = False
 
-    def no_obstacle(self, dist_x, dist_y, pos_fr: Position, pos_to: Position, board: Board):
-        teleporter = [game_object.position for game_object in list(filter(lambda x: x.type == "TeleportGameObject", board.game_objects))]
-        but_l = [game_object.position for game_object in list(filter(lambda x: x.type == "DiamondButtonGameObject", board.game_objects))]
+    def no_obstacle(
+        self, dist_x, dist_y, pos_fr: Position, pos_to: Position, board: Board
+    ):
+        teleporter = [
+            game_object.position
+            for game_object in list(
+                filter(lambda x: x.type == "TeleportGameObject", board.game_objects)
+            )
+        ]
+        but_l = [
+            game_object.position
+            for game_object in list(
+                filter(
+                    lambda x: x.type == "DiamondButtonGameObject", board.game_objects
+                )
+            )
+        ]
         if pos_to in teleporter or pos_to in but_l:
             return True
         func_dist = lambda x, y: abs(x.x - y.x) + abs(x.y - y.y)
@@ -358,10 +481,20 @@ class TBD(BaseLogic):
             max_y = max(pos_fr.y, pos_to.y)
         teleporter.extend(but_l)
         for obs in teleporter:
-            if func_dist(obs, pos_fr) <= 2 and ((obs.x == same_x and min_y <= obs.y <= max_y) or (obs.y == same_y and min_x <= obs.x <= max_x)):
+            if func_dist(obs, pos_fr) <= 2 and (
+                (obs.x == same_x and min_y <= obs.y <= max_y)
+                or (obs.y == same_y and min_x <= obs.x <= max_x)
+            ):
                 self.pos_turned = True
                 return False
-            elif func_dist(obs, pos_fr) == 3 and ((obs.x == same_x and min_y <= obs.y <= max_y) or (obs.y == same_y and min_x <= obs.x <= max_x)) and self.Turned:
+            elif (
+                func_dist(obs, pos_fr) == 3
+                and (
+                    (obs.x == same_x and min_y <= obs.y <= max_y)
+                    or (obs.y == same_y and min_x <= obs.x <= max_x)
+                )
+                and self.Turned
+            ):
                 return True
         return True
 
@@ -374,16 +507,24 @@ class TBD(BaseLogic):
         possible_moves: list[tuple[int, Position]] = []
         listSelfD = self.SelfDefenseProcessor.process(board_bot, board)
         if len(listSelfD) > 0 and listSelfD[0][0] == -2:
-            if ((self.TackleTarget is not None and
-                 self.TackleTarget == listSelfD[0][1].properties.name
-                and self.TackleCounter == 0) or self.TackleTarget is None or self.TackleTarget !=
-                    listSelfD[0][1].properties.name):
+            if (
+                (
+                    self.TackleTarget is not None
+                    and self.TackleTarget == listSelfD[0][1].properties.name
+                    and self.TackleCounter == 0
+                )
+                or self.TackleTarget is None
+                or self.TackleTarget != listSelfD[0][1].properties.name
+            ):
                 self.TackleTarget = listSelfD[0][1].properties.name
                 self.TackleCounter += 1
-                #print(self.TackleTarget, self.TackleCounter)
+                # print(self.TackleTarget, self.TackleCounter)
                 self.goal_position = None
                 self.OldPos = board_bot.position
-                return listSelfD[0][1].position.x - board_bot.position.x, listSelfD[0][1].position.y - board_bot.position.y
+                return (
+                    listSelfD[0][1].position.x - board_bot.position.x,
+                    listSelfD[0][1].position.y - board_bot.position.y,
+                )
         self.TackleTarget = None
         self.TackleCounter = 0
         listDia = self.DiamondProcessor.process(board_bot, board)
@@ -400,9 +541,11 @@ class TBD(BaseLogic):
             dist = 0
         else:
             dist = listGoHome[0][0]
-        possible_moves.extend(self.TeleportProcessor.process(board_bot, board, score_dia, dist))
-        #print(possible_moves)
-        #print(board_bot.properties.diamonds)
+        possible_moves.extend(
+            self.TeleportProcessor.process(board_bot, board, score_dia, dist)
+        )
+        # print(possible_moves)
+        # print(board_bot.properties.diamonds)
         """
                 for prio, pos in possible_moves:
             if prio == -1:
@@ -427,7 +570,9 @@ class TBD(BaseLogic):
         if board_bot.position.y == 0:
             wrong_moves[3] = True
             cnt_wrong_mv += 1
-        real_moves: list[tuple[int, Position]] = list(filter(lambda x: x[0] != -1, possible_moves))
+        real_moves: list[tuple[int, Position]] = list(
+            filter(lambda x: x[0] != -1, possible_moves)
+        )
         real_moves.append((10, board_bot.properties.base))
         """
         minOnes = list(filter(lambda x: x[0] == -1, possible_moves))
@@ -446,25 +591,45 @@ class TBD(BaseLogic):
                 cnt_wrong_mv += 1
         """
         real_moves.sort(key=lambda x: x[0], reverse=True)
-        teleporter = [game_object.position for game_object in list(filter(lambda x: x.type == "TeleportGameObject", board.game_objects))]
-        but_l = [game_object.position for game_object in list(filter(lambda x: x.type == "DiamondButtonGameObject", board.game_objects))]
-        #print(possible_moves)
-        #print(real_moves)
-        #print(wrong_moves)
-        #print(board_bot.position)
-        #print(board_bot.position.x, board_bot.position.y)
-        #print(board_bot.properties.diamonds)
+        teleporter = [
+            game_object.position
+            for game_object in list(
+                filter(lambda x: x.type == "TeleportGameObject", board.game_objects)
+            )
+        ]
+        but_l = [
+            game_object.position
+            for game_object in list(
+                filter(
+                    lambda x: x.type == "DiamondButtonGameObject", board.game_objects
+                )
+            )
+        ]
+        # print(possible_moves)
+        # print(real_moves)
+        # print(wrong_moves)
+        # print(board_bot.position)
+        # print(board_bot.position.x, board_bot.position.y)
+        # print(board_bot.properties.diamonds)
         for prio, pos in real_moves:
             for ind in range(4):
                 pos_turned = False
                 if wrong_moves[ind]:
                     continue
                 dist_x, dist_y = self.directions[ind]
-                cur_dist = abs(board_bot.position.x - pos.x) + abs(board_bot.position.y - pos.y)
-                after_dist = abs(board_bot.position.x + dist_x - pos.x) + abs(board_bot.position.y + dist_y - pos.y)
-                pos_after = Position(board_bot.position.y + dist_y, board_bot.position.x + dist_x)
+                cur_dist = abs(board_bot.position.x - pos.x) + abs(
+                    board_bot.position.y - pos.y
+                )
+                after_dist = abs(board_bot.position.x + dist_x - pos.x) + abs(
+                    board_bot.position.y + dist_y - pos.y
+                )
+                pos_after = Position(
+                    board_bot.position.y + dist_y, board_bot.position.x + dist_x
+                )
                 if after_dist < cur_dist:
-                    if not self.no_obstacle(dist_x, dist_y, board_bot.position, pos, board):
+                    if not self.no_obstacle(
+                        dist_x, dist_y, board_bot.position, pos, board
+                    ):
                         pass
                     else:
                         if self.pos_turned:
